@@ -1,0 +1,17 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+dados = pd.read_csv('macae.csv')
+# -99999
+dados.nivel = dados.nivel.apply(lambda x: np.nan if x == -99999 else x)
+dados = dados.dropna()
+q1 = np.percentile(dados.nivel, 25)
+q3 = np.percentile(dados.nivel, 75)
+iqr = q3 - q1
+ls = q3 + 1.5*iqr
+li = q1 - 1.5*iqr
+dados.nivel = dados.nivel.apply(lambda x: np.mean(dados.nivel) if x > ls or x < li else x)
+
+plt.plot(dados.nivel)
+# plt.show()
